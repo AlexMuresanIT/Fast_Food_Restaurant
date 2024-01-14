@@ -14,7 +14,7 @@ public class Main {
 
 
             System.out.println("-----------------------------");
-            System.out.println("HAMBURGER");
+            System.out.println("HAMBURGER:");
             System.out.println("Regular burger: $7");
             System.out.println("Deluxe burger: $10");
             System.out.println("Topping: $3 each");
