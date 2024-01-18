@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class Meal {
 
     private Hamburger hamburger;
@@ -5,15 +8,16 @@ public class Meal {
     private Drink drink;
     public boolean isDeluxe;
 
+
+
     public Meal(boolean isDeluxe, Hamburger hamburger, SideItem sideItem, Drink drink){
         this.hamburger=hamburger;
         this.sideItem=sideItem;
         this.drink=drink;
     }
 
-    public void addTopping(Hamburger burger,String topping) {
-        String oneTopping=burger.addTopping(topping);
-        System.out.println("Added topping: "+oneTopping);
+    public void addTopping(String topping, double price) {
+        hamburger.addTopping(topping,price);
     }
 
     public void changeSizeSide(SideItem side,String size){
@@ -29,9 +33,9 @@ public class Meal {
             System.out.println("Deluxe hamburger price: $"+hamburger.price);
         }
         else{
-            System.out.println(hamburger.type+" hamburger price: $"+hamburger.price);
+            System.out.println(hamburger.type+" hamburger price: $"+hamburger.getPrice());
         }
-        System.out.println("Number of toppings: "+hamburger.getNrTopping());
+        System.out.println("Toppings: \n"+hamburger);
         System.out.println("_________________________________");
         System.out.println(sideItem.getType()+ " size: "+sideItem.getSize()+" price: $"+sideItem.getPrice());
         System.out.println("_________________________________");
@@ -40,7 +44,7 @@ public class Meal {
     }
 
     public void totalMealPrice(){
-        System.out.println("Your total is: $"+(hamburger.price+ drink.getPrice()+ sideItem.getPrice()));
+        System.out.println("Your total is: $"+(hamburger.getPrice()+ drink.getPrice()+ sideItem.getPrice()));
         System.out.println("Thank you for ordering from us!!!");
     }
 }
@@ -48,22 +52,26 @@ public class Meal {
 class Item{
 
     protected String type;
-    protected int price;
+    protected double price;
 
-    public Item(String type){
+    public Item(String type,double price){
         this.type=type;
+        this.price=price;
+    }
+
+    @Override
+    public String toString() {
+        return "%2s $%.2f".formatted(type,price);
     }
 }
 
 class Hamburger extends Item{
-
-    private String topping;
-
+    private List<Item> toppings = new ArrayList<>();
     private static int nrTopping=0;
 
     public Hamburger(String type){
 
-        super(type);
+        super(type,0);
         if(type.equals("deluxe")){
             this.price=10;
         }
@@ -73,31 +81,30 @@ class Hamburger extends Item{
     }
 
 
-    public String addTopping(String topping){
-        if(nrTopping<=3 && type.equals("regular")){
-            nrTopping++;
-            this.topping=topping;
+    public void addTopping(String topping, double price){
+        toppings.add(new Item(topping,price));
+    }
+
+    @Override
+    public String toString() {
+
+        StringBuilder item = new StringBuilder();
+        for(Item topping:toppings){
+            item.append("\n");
+            item.append(topping);
         }
-        else
-            if(nrTopping<=5 && type.equals("deluxe")){
-                nrTopping++;
-                this.topping=topping;
-            }
-            if(nrTopping == 3 && type.equals("regular")){
-                System.out.println("You have regular menu. You can add up to 3 toppings");
-            } else if (nrTopping == 5 && type.equals("deluxe")) {
-                System.out.println("You have deluxe menu. You can add up to 5 toppings");
-            }
-            return topping;
+        return item.toString();
     }
 
-    public String getTopping() {
-        return topping;
+    public double getPrice(){
+
+        double total = super.price;
+        for(Item topping:toppings){
+            total+=topping.price;
+        }
+        return total;
     }
 
-    public int getNrTopping() {
-        return nrTopping;
-    }
 }
 
 
@@ -154,6 +161,25 @@ class Drink{
     public Drink(String type, String size){
         this.type=type;
         this.size=size;
+        if(size.equals("small"))
+            price=3;
+        else if (size.equals("medium")) {
+            price=5;
+        } else if (size.equals("large")) {
+            price=7;
+        }
+
+    }
+
+    public void setSize(String size) {
+        if(size.equals("small"))
+            price=3;
+        else if (size.equals("medium")) {
+            price=5;
+        } else if (size.equals("large")) {
+            price=7;
+        }
+        this.size = size;
     }
 
     public int getPrice() {
@@ -168,14 +194,5 @@ class Drink{
         return type;
     }
 
-    public void setSize(String size) {
-        if(size.equals("small"))
-            price=3;
-        else if (size.equals("medium")) {
-            price=5;
-        } else if (size.equals("large")) {
-            price=7;
-        }
-        this.size = size;
-    }
+
 }

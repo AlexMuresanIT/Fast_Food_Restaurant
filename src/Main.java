@@ -14,7 +14,7 @@ public class Main {
 
 
             System.out.println("-----------------------------");
-            System.out.println("HAMBURGER:");
+            System.out.println("HAMBURGER");
             System.out.println("Regular burger: $7");
             System.out.println("Deluxe burger: $10");
             System.out.println("Topping: $3 each");
@@ -43,6 +43,28 @@ public class Main {
 
             Hamburger hamburger = new Hamburger(ham);
 
+            while(true){
+                System.out.println("Choose your topping/s");
+                System.out.println("Tomatoes: $1.0");
+                System.out.println("Mayo: $1.0");
+                System.out.println("Onions: $1.0");
+                System.out.println("Ketchup: $1.0");
+                System.out.println("Cheddar: $1.5");
+                String top = s.nextLine();
+                if(top.equals("1")){
+                    break;
+                }
+                else{
+                    switch(top.toLowerCase()){
+                        case "tomatoes" -> hamburger.addTopping(top,1.0);
+                        case "mayo" -> hamburger.addTopping(top,1.0);
+                        case "onions" -> hamburger.addTopping(top,1.0);
+                        case "ketchup"-> hamburger.addTopping(top,1.0);
+                        case "cheddar"-> hamburger.addTopping(top,1.5);
+                        default -> hamburger.addTopping("nothing",0);
+                    };
+                }
+            }
             System.out.println("Choose your side");
             String sid = s.nextLine();
 
